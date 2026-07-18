@@ -19,17 +19,14 @@ const nextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(self), geolocation=(self)" },
-          {
-            key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https:",
-              "connect-src 'self' https://generativelanguage.googleapis.com https://api.openai.com",
-              "frame-ancestors 'none'",
-            ].join("; "),
-          },
+          // Content-Security-Policy is intentionally NOT set here. It's set
+          // per-request in src/middleware.ts instead, because a strict
+          // script-src needs a fresh nonce on every request — a static
+          // value in next.config.js can only ever be 'unsafe-inline',
+          // which defeats the point (see middleware.ts buildCsp() for the
+          // full rationale). Keeping it here as a static header would
+          // silently override or conflict with the dynamic one depending
+          // on header-merge order, so it's removed rather than duplicated.
         ],
       },
     ];
