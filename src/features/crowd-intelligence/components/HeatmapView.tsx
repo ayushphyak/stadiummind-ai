@@ -15,6 +15,8 @@ const MOCK_GATES: GateReading[] = [
   { gateId: "D", label: "Gate D — West", currentOccupancy: 3500, capacity: 10000, minutesToKickoff: 45 },
 ];
 
+const GATE_BY_ID = new Map(MOCK_GATES.map((g) => [g.gateId, g]));
+
 const levelColor: Record<string, string> = {
   low: "bg-turf",
   moderate: "bg-turf-bright",
@@ -109,7 +111,7 @@ export function HeatmapView() {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {predictions.map((p) => {
-        const gate = MOCK_GATES.find((g) => g.gateId === p.gateId);
+        const gate = GATE_BY_ID.get(p.gateId);
         return (
           <Card key={p.gateId} className="transition-shadow hover:shadow-xl hover:shadow-black/30">
             <CardHeader>
